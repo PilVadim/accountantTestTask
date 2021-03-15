@@ -26,7 +26,7 @@ public class Operation {
 
     @DateTimeFormat(pattern = "dd.MM.yyyy HH:mm:ss")
     @JsonFormat(pattern = "dd.MM.yyyy HH:mm:ss")
-    @Column(name = "proceeddate")
-    private LocalDateTime proceedDate;
+    @Column(name = "proceededdate")
+    private LocalDateTime proceededDate;
 
 }

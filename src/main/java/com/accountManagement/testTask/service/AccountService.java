@@ -9,7 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import static com.accountManagement.testTask.service.SecurityService.currentUserId;
+import static com.accountManagement.testTask.service.SecurityService.currentUserIsAdmin;
 
 @Service
 @SessionScope
@@ -26,7 +31,13 @@ public class AccountService {
     }
 
     public List<Account> findAllByUserId(Integer userId){
-        return accountRepo.findAllByUserId(userId);
+
+        if ( currentUserIsAdmin() || currentUserId().equals(userId) ) {
+            return accountRepo.findAllByUserId(userId);
+        } else {
+            return new ArrayList<>();
+        }
+
     }
 
     public synchronized Account save( Account account ){

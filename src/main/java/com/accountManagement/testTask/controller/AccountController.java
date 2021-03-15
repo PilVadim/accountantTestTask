@@ -12,7 +12,7 @@ import java.util.List;
 
 @Api(value="Account controller class", description="Работа со Счетами")
 @RestController
-@RequestMapping("/api/1.0/accounts")
+@RequestMapping("/api/v1")
 public class AccountController {
 
     private final AccountService accountService;
@@ -23,19 +23,19 @@ public class AccountController {
     }
 
     @ApiOperation(value = "Получить все Счета пользователя", response = Account.class)
-    @GetMapping("/all/{userId}")
+    @GetMapping("/accounts/all/{userId}")
     public List<Account> getAll(@PathVariable Integer userId){
         return accountService.findAllByUserId( userId );
     }
 
     @ApiOperation(value = "Добавить/изменить Аккаунт", response = Account.class)
-    @PostMapping("/admin/")
+    @PostMapping("/admin/accounts")
     public Account save(@RequestBody Account account){
         return accountService.save( account );
     }
 
     @ApiOperation(value = "Удалить Аккаунт", response = Account.class)
-    @DeleteMapping("/admin/{accountId}")
+    @DeleteMapping("/admin/accounts/{accountId}")
     public String delete(@PathVariable Integer accountId){
         return accountService.delete(accountId);
     }

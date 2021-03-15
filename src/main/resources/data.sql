@@ -30,7 +30,7 @@ CREATE TABLE accounts (
   accountId INT AUTO_INCREMENT  PRIMARY KEY,
   userId INT NOT NULL,
   comment VARCHAR_IGNORECASE(255) NOT NULL,
-  isDeleted BOOLEAN,
+  isDeleted BOOLEAN DEFAULT FALSE,
   openedDate TIMESTAMP,
   closedDate TIMESTAMP,
   foreign key (userId) references auth_users(userId)
@@ -40,10 +40,23 @@ CREATE TABLE operations (
   operationId INT AUTO_INCREMENT  PRIMARY KEY,
   accountId INT NOT NULL,
   difference decimal (20,2) NOT NULL,
-  isConfirmed BOOLEAN,
+  isConfirmed BOOLEAN DEFAULT TRUE,
   proceededDate TIMESTAMP,
   foreign key (accountId) references accounts(accountId)
 );
+
+CREATE VIEW v_users_operations
+AS
+SELECT
+  op.operationId,
+  acc.userId,
+  acc.accountId,
+  op.difference,
+  op.proceededDate
+FROM operations op
+  LEFT JOIN accounts acc ON op.accountId = acc.accountId
+    AND (acc.isDeleted IS NULL OR acc.isDeleted = false)
+    AND op.isConfirmed = TRUE;
 
 INSERT INTO be_roles (name) VALUES ( 'ADMIN' ),( 'USER' );
 
@@ -60,5 +73,7 @@ VALUES ( 1,'acc one',false,'1900-01-01 00:00:00.0',NULL ),
 
 INSERT INTO operations (accountId,difference,isConfirmed,proceededDate)
 VALUES ( 1,1000.01,true,'2010-01-01 00:00:00.0'),
+       ( 1,1200.21,true,'2010-01-01 00:00:00.0'),
        ( 2,-500.01,true,'2010-07-07 00:00:00.0' ),
-       ( 2,10000,true,'2010-03-02 00:00:00.0' );
+       ( 2,1000.01,true,'2010-07-07 00:00:00.0' ),
+       ( 3,10200,true,'2010-03-02 00:00:00.0' );

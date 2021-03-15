@@ -71,16 +71,9 @@ public class Security extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/library/**")
-                .permitAll()
-
+                .antMatchers("/api/v1/admin/**").hasAnyAuthority(ADMIN_ROLE)
+                .antMatchers("/api/v1/**").hasAnyAuthority(USER_ROLE)
                 .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/1.0/admin/**").hasAnyAuthority(ADMIN_ROLE)
-                .antMatchers(HttpMethod.PUT, "/api/1.0/admin/**").hasAnyAuthority(ADMIN_ROLE)
-                .antMatchers(HttpMethod.DELETE, "/api/1.0/admin/**").hasAnyAuthority(ADMIN_ROLE)
-                .and()
-
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()

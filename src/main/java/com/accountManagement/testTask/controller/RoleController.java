@@ -13,7 +13,7 @@ import java.util.List;
 
 @Api(value="Roles controller class", description="Работа с Ролями")
 @RestController
-@RequestMapping("/api/1.0/roles")
+@RequestMapping("/api/v1")
 public class RoleController {
 
     private final RoleService roleService;
@@ -24,7 +24,7 @@ public class RoleController {
     }
 
     @ApiOperation(value = "Получить все Роли", response = Role.class)
-    @GetMapping("/admin/all")
+    @GetMapping("/admin/roles/all")
     public List<String> getAll(){
 
         return roleService.findAll();
