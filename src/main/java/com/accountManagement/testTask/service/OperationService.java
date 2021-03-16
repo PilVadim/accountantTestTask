@@ -11,13 +11,16 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import static com.accountManagement.testTask.service.SecurityService.currentUserId;
 import static com.accountManagement.testTask.service.SecurityService.currentUserIsAdmin;
 
 @Service
+@SessionScope
 public class OperationService {
 
     private final AccountRepo accountRepo;
@@ -43,12 +46,44 @@ public class OperationService {
 
     }
 
-    public Operation save( Operation operation ){
-        return operation; //TODO complete it
+    public synchronized Operation save( Operation operation ){
+
+        checkOperation( operation );
+        return operationRepo.save(operation);
+
+    }
+
+    private void checkOperation( Operation op ) {
+
+        if ( op.getOperationId() != null ) {
+            throw new MyBadRequestException( "You can't change operation" );
+        }
+
+        if ( op.getAccountId() == null ) {
+            throw new MyBadRequestException( "AccountId should be filled" );
+        }
+
+        if ( op.getDifference() == null || op.getDifference().equals(BigDecimal.ZERO) ) {
+            throw new MyBadRequestException( "Difference should be filled" );
+        }
+
+        Account acc = accountRepo.findById( op.getAccountId() )
+                .orElseThrow(() -> new MyBadRequestException( "Account should be filled" ) );
+
+        if ( ! (currentUserIsAdmin() || acc.getUserId().equals( currentUserId() )) ) {
+            throw new MyBadRequestException( "Account doesn't belongs to current User" );
+        }
+
+        Double sum = vUsersOperationsRepo.getSumByAccountId( op.getAccountId() );
+
+        if ( BigDecimal.valueOf( sum ).add( op.getDifference() ).compareTo(BigDecimal.valueOf( 0.0 )) < 0){
+            throw new MyBadRequestException( "Operation couldn't be proceeded. Balance below zero" );
+        }
+
     }
 
 
-    public Float totalByAccountId(Integer accountId ) {
+    public Double totalByAccountId(Integer accountId ) {
 
         if ( checkAccess(accountId) ) {
             return vUsersOperationsRepo.getSumByAccountId(accountId);
@@ -58,7 +93,7 @@ public class OperationService {
 
     }
 
-    public Float totalByUserId(Integer userId ) {
+    public Double totalByUserId(Integer userId ) {
 
         if ( checkAccessUserId(userId) ) {
             return vUsersOperationsRepo.getSumByUserId(userId);

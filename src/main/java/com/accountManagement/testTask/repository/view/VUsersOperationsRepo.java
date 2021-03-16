@@ -11,10 +11,10 @@ import java.util.List;
 public interface VUsersOperationsRepo extends PagingAndSortingRepository<VUsersOperations, Integer> {
 
     @Query("SELECT SUM(op.difference) FROM VUsersOperations op WHERE op.accountId = :accountId")
-    public Float getSumByAccountId(@Param("accountId") Integer accountId);
+    Double getSumByAccountId(@Param("accountId") Integer accountId);
 
     @Query("SELECT SUM(op.difference) FROM VUsersOperations op WHERE op.userId = :userId")
-    public Float getSumByUserId(@Param("userId") Integer userId);
+    Double getSumByUserId(@Param("userId") Integer userId);
 
 
 }

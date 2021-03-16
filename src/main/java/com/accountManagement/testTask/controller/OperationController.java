@@ -35,13 +35,13 @@ public class OperationController {
 
     @ApiOperation(value = "Получить получить итог по Счету", response = Float.class)
     @GetMapping("/account/total/{accountId}")
-    public Float getTotalByAccountId(@PathVariable Integer accountId){
+    public Double getTotalByAccountId(@PathVariable Integer accountId){
         return operationService.totalByAccountId( accountId );
     }
 
     @ApiOperation(value = "Получить получить итог по Пользователю", response = Float.class)
     @GetMapping("/user/total/{userId}")
-    public Float getTotalByUserId(@PathVariable Integer userId){
+    public Double getTotalByUserId(@PathVariable Integer userId){
         return operationService.totalByUserId( userId );
     }
 
