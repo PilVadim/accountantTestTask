@@ -9,8 +9,8 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.accountManagement</groupId>
-	<artifactId>testTask</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>testTaskAccountant</artifactId>
+	<version>1.0</version>
 	<packaging>war</packaging>
 	<name>testTask</name>
 	<description>Middle java task</description>

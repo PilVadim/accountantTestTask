@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  tomcat:
+    image: tomcat:8.5.35
+    container_name: tomcat
+    volumes:
+      - ./testTaskAccountant.war:/usr/local/tomcat/webapps/testTaskAccountant.war
+    ports:
+      - "8080:8080"

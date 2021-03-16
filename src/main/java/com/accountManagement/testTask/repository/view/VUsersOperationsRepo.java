@@ -1,12 +1,9 @@
 package com.accountManagement.testTask.repository.view;
 
-import com.accountManagement.testTask.model.Account;
 import com.accountManagement.testTask.model.view.VUsersOperations;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface VUsersOperationsRepo extends PagingAndSortingRepository<VUsersOperations, Integer> {
 
